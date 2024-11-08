@@ -31,6 +31,8 @@ services:
     restart: unless-stopped
     networks:
       - my-network
+    volumes:
+      - mongo_data:/data/db
 
   cache:
     image: redis
@@ -39,6 +41,12 @@ services:
     restart: unless-stopped
     networks:
       - my-network
+    volumes:
+      - redis_data:/data
 
 networks:
   my-network:
+
+volumes:
+  mongo_data:
+  redis_data:
