@@ -18,14 +18,25 @@ services:
       - my-network
     depends_on:
       - monggodebe
+      - cache
     # environment:
     #   - MONGO_URL=mongodb://kiwkiw:27017/mydb
     env_file:
       - ./backend/.env
+
   monggodebe:
     image: mongo
     ports:
       - 27017:27017
+    restart: unless-stopped
+    networks:
+      - my-network
+
+  cache:
+    image: redis
+    ports:
+      - 6379:6379
+    restart: unless-stopped
     networks:
       - my-network
 
