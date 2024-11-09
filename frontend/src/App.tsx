@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import List from "./components/List";
 
 const service_1 = "http://localhost:3001";
 const service_2 = "http://localhost:3002";
@@ -16,14 +17,14 @@ function App() {
       const response = await fetch(service_1);
       const data = await response.json();
 
-      setData(data);
-      setMessage(data.message);
+      setData(data.existingTasks);
+      setMessage("Hello Skyes!");
     };
 
     const getData = async () => {
       const resp = await fetch(service_2);
       const dt = await resp.json();
-      setDatax(dt);
+      setDatax(dt.existingTasks);
     };
 
     fetchData();
@@ -42,13 +43,13 @@ function App() {
       </div>
       {message && <h1>{message}</h1>}
       <h1>Service 1</h1>
-      {data && <p>{JSON.stringify(data)}</p>}
+      {data && <List data={data} />}
 
       <br />
       <br />
       <br />
       <h1>Service 2</h1>
-      {datax && <p>{JSON.stringify(datax)}</p>}
+      {datax && <List data={datax} />}
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
