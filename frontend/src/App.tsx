@@ -3,22 +3,31 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
-const apiUrl = "http://localhost:3001";
+const service_1 = "http://localhost:3001";
+const service_2 = "http://localhost:3002";
 
 function App() {
   const [count, setCount] = useState(0);
   const [message, setMessage] = useState("");
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
+  const [datax, setDatax] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const response = (await fetch(apiUrl)) as Response;
+      const response = await fetch(service_1);
       const data = await response.json();
-      console.log(data);
+
       setData(data);
       setMessage(data.message);
     };
 
+    const getData = async () => {
+      const resp = await fetch(service_2);
+      const dt = await resp.json();
+      setDatax(dt);
+    };
+
     fetchData();
+    getData();
   }, []);
 
   return (
@@ -32,7 +41,14 @@ function App() {
         </a>
       </div>
       {message && <h1>{message}</h1>}
+      <h1>Service 1</h1>
       {data && <p>{JSON.stringify(data)}</p>}
+
+      <br />
+      <br />
+      <br />
+      <h1>Service 2</h1>
+      {datax && <p>{JSON.stringify(datax)}</p>}
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}

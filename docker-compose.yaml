@@ -2,6 +2,7 @@ name: doker-kompos
 
 services:
   frontend:
+    # image: skyespirates/compose-frontend
     build: ./frontend
     ports:
       - 4444:80
@@ -11,6 +12,7 @@ services:
       - backend
 
   backend:
+    # image: skyespirates/compose-backend
     build: ./backend
     ports:
       - 3001:3001
@@ -24,6 +26,21 @@ services:
     env_file:
       - ./backend/.env
 
+  some-service:
+    # image: skyespirates/compose-some-service
+    build: ./some-service
+    ports:
+      - 3002:3002
+    networks:
+      - my-network
+    depends_on:
+      maisekuel:
+        condition: service_healthy # make sure mysql container is ready before running this service
+      cache:
+        condition: service_started
+    env_file:
+      - ./some-service/.env
+
   monggodebe:
     image: mongo
     ports:
@@ -33,6 +50,23 @@ services:
       - my-network
     volumes:
       - mongo_data:/data/db
+
+  maisekuel:
+    image: mysql
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+    networks:
+      - my-network
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    healthcheck: # healthcheck mechanism
+      test:
+        ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -P 3306 -u root -psecret"]
+      interval: 10s
+      retries: 5
 
   cache:
     image: redis
@@ -50,3 +84,4 @@ networks:
 volumes:
   mongo_data:
   redis_data:
+  mysql_data:
