@@ -10,4 +10,14 @@ services:
     routes:
       - name: backend-route
         paths:
-          - /api/auth/
+          - /api/backend
+
+  - name: some-service
+    url: http://some-service:3002
+    connect_timeout: 60000
+    write_timeout: 60000
+    read_timeout: 60000
+    routes:
+      - name: some-service-route
+        paths:
+          - /api/some-service/

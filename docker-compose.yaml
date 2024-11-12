@@ -42,7 +42,7 @@ services:
       - ./some-service/.env
 
   kong-service:
-    image: kong/kong-gateway
+    image: kong/kong-gateway:latest
     restart: unless-stopped
     ports:
       - "7000:8000" # Proxy
@@ -58,13 +58,13 @@ services:
       - KONG_ADMIN_ERROR_LOG=/dev/stderr
       - KONG_ADMIN_LISTEN=0.0.0.0:8001, 0.0.0.0:8444 ssl
       - KONG_ADMIN_GUI_URL=http://localhost:7002
-      - KONG_DECLARATIVE_CONFIG=/etc/kong/kong.yml
+      - KONG_DECLARATIVE_CONFIG=/kong/declarative/kong.yml
     volumes:
-      - ./kong/kong.yml:/etc/kong/kong.yml
+      - ./kong-service/kong.yml:/kong/declarative/kong.yml
     networks:
       - my-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7001/"]
+      test: ["CMD", "curl", "-f", "http://localhost:8001/status"]
       interval: 30s
       timeout: 10s
       retries: 3
